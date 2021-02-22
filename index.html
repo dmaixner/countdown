@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en" style="height: 100%;display: grid;">
+    <head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <meta name="description" content="Countdown"/>
+        <title>Countdown</title>
+        <script src="https://cdn.jsdelivr.net/gh/alpinejs/alpine@v2.x.x/dist/alpine.min.js" defer></script>
+    </head>
+    <body style="background-color:black;color:white;font-family:monospace;font-size:128px;height: 95%;display: grid;">
+        <div style="margin:auto;text-align:center" x-data="getData()" x-init="init()">
+            <div x-text="getDaysString()"></div>
+            <div x-text="getTimeString()"></div>
+        </div>
+        <script>
+            function getCountDown() {
+                const diff = new Date(new URLSearchParams(window.location.search).get('time') - new Date().getTime());
+                return diff > 0 ? diff : 0;
+            }
+
+            function getData() {
+                return {
+                    countDown: getCountDown(),
+                    init() {
+                        setInterval(() => {
+                            this.countDown = getCountDown()
+                        }, 1000);
+                    },
+                    getDaysString() {
+                        const days = Math.floor(getCountDown().getTime() / 1000 / 60 / (60 * 24));
+                        return days > 0 ? days + ' days' : '';
+                    },
+                    getTimeString() {
+                        return getCountDown().getHours().toLocaleString('en-US', { minimumIntegerDigits: 2 }) + ':' +
+                            getCountDown().getMinutes().toLocaleString('en-US', { minimumIntegerDigits: 2 }) + ':' + 
+                            getCountDown().getSeconds().toLocaleString('en-US', { minimumIntegerDigits: 2 });
+                    },
+                }
+            } 
+        </script>
+    </body>
+</html>
