@@ -11,6 +11,7 @@
         <div style="margin:auto;text-align:center" x-data="getData()" x-init="init()">
             <div x-text="getDaysString()"></div>
             <div x-text="getTimeString()"></div>
+            <div x-show="showHelp" style='font-size:4vmin;display:none'>see<br/><a href='https://github.com/dmaixner/countdown'>https://github.com/dmaixner/countdown</a></div>
         </div>
         <script>
             function getCountDown() {
@@ -21,19 +22,29 @@
             function getData() {
                 return {
                     countDown: getCountDown(),
+                    showHelp: false,
                     init() {
+                        this.showHelp = getCountDown() === 0;
                         setInterval(() => {
                             this.countDown = getCountDown()
                         }, 1000);
                     },
                     getDaysString() {
-                        const days = Math.floor(getCountDown().getTime() / 1000 / 60 / (60 * 24));
-                        return days > 0 ? days + ' days' : '';
+                        if (this.countDown !== 0) {
+                            const days = Math.floor(this.countDown.getTime() / 1000 / 60 / (60 * 24));
+                            return days > 0 ? days + ' days' : '';
+                        } else {
+                            return ""
+                        }
                     },
                     getTimeString() {
-                        return getCountDown().getHours().toLocaleString('en-US', { minimumIntegerDigits: 2 }) + ':' +
-                            getCountDown().getMinutes().toLocaleString('en-US', { minimumIntegerDigits: 2 }) + ':' + 
-                            getCountDown().getSeconds().toLocaleString('en-US', { minimumIntegerDigits: 2 });
+                        if (this.countDown !== 0) {
+                            return this.countDown.getHours().toLocaleString('en-US', { minimumIntegerDigits: 2 }) + ':' +
+                                this.countDown.getMinutes().toLocaleString('en-US', { minimumIntegerDigits: 2 }) + ':' + 
+                                this.countDown.getSeconds().toLocaleString('en-US', { minimumIntegerDigits: 2 });
+                        } else {
+                             return "";
+                        }
                     },
                 }
             } 
