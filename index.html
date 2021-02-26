@@ -19,7 +19,8 @@
                 if (isNaN(paramTime)) {
                     return 0;
                 } else {
-                    return new Date(paramTime - Date.now());
+                    const diffDate = paramTime - Date.now();
+                    return diffDate > 0 ? new Date(diffDate) : 0;
                 }
             }
 
